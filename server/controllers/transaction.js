@@ -23,11 +23,16 @@ export const deleteTransaction = async(req, res, next) => {
     }
 }
 
-export const updatedTransaction = async(req, res, next) => {
+export const updateTransaction = async(req, res, next) => {
     try{
-        await Transaction.findByIdAndUpdate(req.params.id);
+        const transaction = await Transaction.findById(req.params.id);
+        if(!transaction) return next(createError(404, "Transaction not found!"));
+
+        const updatedTransaction = await Transaction.findByIdAndUpdate(req.params.id, {
+            $set: req.body,
+        }, {new: true})
         
-        res.status(200).json("The transaction has been updated!");
+        res.status(200).json(updatedTransaction);
     } catch(err){
         next(createError(err));
     }
@@ -42,43 +47,22 @@ export const getTransaction = async(req, res, next) => {
     } catch(err) {
         next(createError(err));
     }
-
-}
-
-/*export const getSubtitle = async(req, res, next) => {
-    try{
-        const subtitles = await Subtitle.find({userID: req.params.id})
-        console.log("SubstitlesTest: ", subtitles)
-        res.status(200).json(subtitles);
-    } catch(err) {
-        next(createError(err));
-    }
-}
-
-export const updateSubtitle = async(req, res, next) => {
-    try{
-
-        const subtitle = await Subtitle.findById(req.params.id);
-        if(!subtitle) return next(createError(404, "Subtitle not found!"));
-
-        const updatedSubtitle = await Subtitle.findByIdAndUpdate(req.params.id, {
-            $set: req.body,
-        }, {new: true})
-
-        res.status(200).json(updatedSubtitle);
-    }catch(err) {
-        next(createError(err));
-    }
 }
 
 
-export const deleteSubtitle = async(req, res, next) => {
+/*
+export const changeTransactionState = async(req, res, next) => {
     try{
-        await Subtitle.findByIdAndDelete(req.params.id);
+        const transaction = await Transaction.findById(req.params.id);
+        if(!transaction) return next(createError(404, "Transaction not found!"));
 
-        res.status(200).json("The substitle has been deleted!");
+        const updatedTransaction = await Transaction.findByIdAndUpdate(req.params.id, {
+            $state: req.body.state,
+        })
 
-    }catch(err){
+        res.status(200).json(updatedTransaction);
+
+    } catch (err) {
         next(createError(err));
     }
 }*/
