@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import express from "express";
 import mongoose from "mongoose";
 import authRoutes from "./routes/auth.js";
+import authSubs from "./routes/subtitle.js";
 
 const PORT = process.env.PORT || 5000
 const app = express();
@@ -19,7 +20,10 @@ const connect = () => {
 
 app.use(cookieParser());
 app.use(express.json()); // Allow the application to see the request with json format
+
 app.use("/api/auth", authRoutes);
+app.use("/api/sub", authSubs);
+
 app.use((err, req, res, next) => {
     const status = err.status || 500;
     const message = err.message || "Something went wrong";
