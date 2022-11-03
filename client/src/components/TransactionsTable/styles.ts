@@ -3,13 +3,16 @@ import styled from "styled-components";
 export const Container = styled.main`
     margin-top: 4rem;
     
+
     h1 {
-        display: none;
-        font-size: 1.4rem;
-        font-weight: 400;
+        position: absolute;
+        right: 0;
+        margin-right:20px;
+        cursor:pointer;
 
         @media (max-width: 720px) {
             display: flex;
+            right: 20px;
         }
     }
 

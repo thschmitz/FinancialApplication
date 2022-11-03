@@ -5,7 +5,6 @@ import { createError } from "../error.js";
 import User from "../models/User.js";
 
 export const signup = async(req, res, next) => {
-
     try{
         console.log(req.body)
         const salt = bcrypt.genSaltSync(10);
@@ -21,7 +20,6 @@ export const signup = async(req, res, next) => {
 }
 
 export const signin = async(req, res, next) => {
-    console.log("Entrou")
     try {
         const user = await User.findOne({ email: req.body.email });
         if (!user) return next(createError(404, "User not found!"));
@@ -39,7 +37,7 @@ export const signin = async(req, res, next) => {
             httpOnly: true,
           })
           .status(200)
-          .json(others);
+          .json({others, token});
     } catch (err) {
         next(err);
     }

@@ -7,6 +7,8 @@ const router = express.Router();
 
 router.get("/getParcelas", verifyToken, getParcelas);
 
+router.get("/getTransaction", verifyToken, getTransaction);
+
 router.post("/addParcela", verifyToken, addParcela);
 
 router.post("/addTransaction", verifyToken, addTransaction);
@@ -15,7 +17,6 @@ router.put("/updateTransaction", verifyToken, updateTransaction);
 
 router.delete("/deleteTransaction", verifyToken, deleteTransaction);
 
-router.get("/getTransaction", verifyToken, getTransaction);
 
 
 

@@ -3,8 +3,9 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import InputAdornment from '@mui/material/InputAdornment';
 import axios from "axios";
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { loginFailure, loginStart, loginSuccess } from "../../redux/userSlice";
+import { tokenService } from "../../services/tokenService";
 import { Header } from "../Header";
 import "./styles.css";
 
@@ -13,6 +14,9 @@ export function SignIn() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const dispatch = useDispatch();
+    const {currentUser} = useSelector((state) => state.user);
+
+    console.log("CurrentUser: ", currentUser);
 
     function funcoes(){
         document.querySelector(`#nomeCriar`).value = "";
@@ -39,23 +43,17 @@ export function SignIn() {
 
         dispatch(loginStart());
 
-        console.log(email, password)
-
         try{
-            const res = await axios({method: "post", url: "http://localhost:5000/api/auth/signin", withCredentials: false, data: {email: email, password: password}});
+            const res = await axios({method: "post", url: "http://localhost:5000/api/auth/signin", data: {email: email, password: password}});
+            console.log(res?.data);
 
-            console.log(res.data);
+            tokenService.save(res.data.token);
 
-            dispatch(loginSuccess(res.data));
+            dispatch(loginSuccess(res.data.others));
         } catch(err) {
             dispatch(loginFailure());
         }
-        
-
-
-
     }
-
 
     return (
         <>
