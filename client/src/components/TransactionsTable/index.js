@@ -1,24 +1,32 @@
 import CachedIcon from '@mui/icons-material/Cached';
 import axios from 'axios';
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { tokenService } from "../../services/tokenService";
 import { Container } from './styles.ts';
 
 export function TransactionTable() {
 
     const {currentUser} = useSelector((state) => state.user);
+    const [transactions, setTransaction] = useState();
+    const [reloads, setReloads] = useState(0);
+
 
     async function reload(e) {
         e.preventDefault();
+        const token = tokenService.get();
 
         try{
-            const res = await axios({method: "get", url: "http://localhost:5000/api/action/getTransaction", headers: {"Content-Type": "application/json"}});
+            const res = await axios({method: "get", url: "http://localhost:5000/api/action/getTransaction", withCredentials: false, headers: {"Content-Type": "application/json", "Authorization": `Bearer ${token}`}});
 
-            console.log(res.data);
+            setTransaction(res.data);
         } catch(err) {
             console.log(err);
         }
 
     }
+
+    console.log("Transaction: ", transactions)
 
     return (
         <Container>
@@ -40,19 +48,18 @@ export function TransactionTable() {
 
                 <tbody>
                     
-                    {/*transactions.map(transactions => {
+                    {transactions.map(transactions => {
                         return (
-                            <tr key={transactions.id}>
-                                <td>{transactions.title}</td>
+                            <tr key={transactions._id}>
+                                <td>{transactions.name}</td>
                                 <td className={transactions.type}>
-                                    {transactions.type === 'withdraw' ? '- ' : ''}
 
                                     {new Intl.NumberFormat('pt-BR', {
                                         style: 'currency',
                                         currency: 'BRL'
-                                    }).format(transactions.amount)}
+                                    }).format(transactions.value)}
                                 </td> 
-                                <td>{transactions.category}</td>
+                                <td>{transactions.subtitle}</td>
                                 <td>
                                      {new Intl.DateTimeFormat('pt-BR').format(
                                         new Date(transactions.createdAt)
@@ -60,7 +67,7 @@ export function TransactionTable() {
                                 </td>
                             </tr>
                         )
-                    })*/}
+                    })}
                 </tbody>
             </table>
         </Container>

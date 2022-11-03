@@ -8,6 +8,7 @@ const TransactionSchema = new mongoose.Schema({
     },
     subtitle: {
         type: String,
+        required:true,
     },
     value: {
         type: Number,
