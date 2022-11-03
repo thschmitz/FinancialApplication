@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 
-const TransactionSchema = new mongoose.Schema({
+const ParcelaSchema = new mongoose.Schema({
     name: {
         type:String,
         required: true,
@@ -13,11 +13,15 @@ const TransactionSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
-    time: {
-        type: String,
+    days: {
+        type: Array,
         required: true,
     },
-    state: {
+    numero: {
+        type: Number,
+        required:true,
+    },
+    time: {
         type: String,
         required: true,
     },
@@ -27,4 +31,4 @@ const TransactionSchema = new mongoose.Schema({
     },
 }, {timestamps:true})
 
-export default mongoose.model("Transaction", TransactionSchema);
+export default mongoose.model("Parcelas", ParcelaSchema);
