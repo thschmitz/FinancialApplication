@@ -1,13 +1,18 @@
 import { Button, Step, StepLabel, Stepper, TextField } from "@material-ui/core";
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import InputAdornment from '@mui/material/InputAdornment';
+import axios from "axios";
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { loginFailure, loginStart, loginSuccess } from "../../redux/userSlice";
 import { Header } from "../Header";
 import "./styles.css";
 
 export function SignIn() {
     // In this component i need to add the tabs to make the choice to which component i wanna see
-    const [etapaAtual, setEtapaAtual] = useState();
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const dispatch = useDispatch();
 
     function funcoes(){
         document.querySelector(`#nomeCriar`).value = "";
@@ -29,14 +34,26 @@ export function SignIn() {
         document.querySelector(".modalLoginConta").style.display = "none";
     }
 
-    function logar(e) {
+    async function logar(e) {
         e.preventDefault();
 
-        const email = document.getElementById("emailLogin").value;
-        const senha = document.getElementById("senhaLogin").value;
+        dispatch(loginStart());
+
+        console.log(email, password)
+
+        try{
+            const res = await axios({method: "post", url: "http://localhost:5000/api/auth/signin", withCredentials: false, data: {email: email, password: password}});
+
+            console.log(res.data);
+
+            dispatch(loginSuccess(res.data));
+        } catch(err) {
+            dispatch(loginFailure());
+        }
+        
 
 
-        console.log(email, senha);
+
     }
 
 
@@ -73,8 +90,8 @@ export function SignIn() {
                     <h1>Formulario login</h1>
                 </div>
                     <div className="formularioDados">
-                        <TextField id="emailLogin" label="Email" type="email" required margin="normal" fullWidth variant="outlined"/>
-                        <TextField id="senhaLogin" label="Senha" type="password" required margin="normal" fullWidth variant="outlined"/>
+                        <TextField id="emailLogin" label="Email" type="email" required margin="normal" fullWidth variant="outlined" onChange={e => setEmail(e.target.value)}/>
+                        <TextField id="senhaLogin" label="Senha" type="password" required margin="normal" fullWidth variant="outlined" onChange={e => setPassword(e.target.value)}/>
                         <div className="botao">
                             <Button type="submit" onClick={(e)=>voltar(e)} variant="contained" color="primary">Voltar</Button>
                             <Button type="submit" variant="contained" onClick={(e) => logar(e)} color="primary">Login</Button>
