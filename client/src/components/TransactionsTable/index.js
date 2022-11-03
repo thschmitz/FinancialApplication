@@ -1,11 +1,33 @@
+import CachedIcon from '@mui/icons-material/Cached';
+import axios from 'axios';
+import { useSelector } from "react-redux";
 import { Container } from './styles.ts';
 
 export function TransactionTable() {
 
+    const {currentUser} = useSelector((state) => state.user);
+
+    async function reload(e) {
+        e.preventDefault();
+
+        try{
+            const res = await axios({method: "get", url: "http://localhost:5000/api/action/getTransaction", headers: {"Content-Type": "application/json"}});
+
+            console.log(res.data);
+        } catch(err) {
+            console.log(err);
+        }
+
+    }
+
     return (
         <Container>
-            <h1>Listagem</h1>
-            
+
+            <h1 className="center">
+                <CachedIcon color="secondary" sx={{fontSize: 40}} onClick={(e) => reload(e)}/>
+
+            </h1>
+
             <table>
                 <thead>
                     <tr>
