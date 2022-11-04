@@ -3,8 +3,7 @@ import Transaction from "../models/Transaction.js";
 
 
 export const addTransaction = async(req, res, next) => {
-    const transaction = new Transaction({name: req.body.name, value: req.body.value, time: req.body.time, userID: req.user.id});
-    
+    const transaction = new Transaction({name: req.body.name, subtitle: req.body.subtitle, value: req.body.value, time: req.body.time, state: req.body.state, userID: req.user.id});
     try{
         await transaction.save();
         res.status(200).send("Transaction has been created!");

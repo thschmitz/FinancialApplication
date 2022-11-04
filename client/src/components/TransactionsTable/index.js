@@ -5,11 +5,10 @@ import { useSelector } from "react-redux";
 import { tokenService } from "../../services/tokenService";
 import { Container } from './styles.ts';
 
-export function TransactionTable() {
+export function TransactionTable({handleOpenIsSingleModalOpen}) {
 
     const {currentUser} = useSelector((state) => state.user);
     const [transactions, setTransaction] = useState();
-    const [reloads, setReloads] = useState(0);
 
 
     async function reload(e) {
@@ -43,15 +42,16 @@ export function TransactionTable() {
                         <th>Valor</th>
                         <th>Categoria</th>
                         <th>Data</th>
+                        <th>Estado</th>
                     </tr>
                 </thead>
 
                 <tbody>
                     
-                    {transactions.map(transactions => {
+                    {transactions?.map(transactions => {
                         return (
                             <tr key={transactions._id}>
-                                <td>{transactions.name}</td>
+                                <td onClick={handleOpenIsSingleModalOpen}>{transactions.name}</td>
                                 <td className={transactions.type}>
 
                                     {new Intl.NumberFormat('pt-BR', {
@@ -61,9 +61,14 @@ export function TransactionTable() {
                                 </td> 
                                 <td>{transactions.subtitle}</td>
                                 <td>
-                                     {new Intl.DateTimeFormat('pt-BR').format(
-                                        new Date(transactions.createdAt)
-                                     )}
+                                    {transactions.time}
+                                </td>
+                                <td>
+                                    {transactions.state === "PAGO"?
+                                    <p className="text-green-800">PAGO</p>
+                                    :
+                                    <p className="text-red-800">PENDENTE</p>
+                                    }
                                 </td>
                             </tr>
                         )

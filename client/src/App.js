@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import { Dashboard } from './components/Dashboard';
 import { Header } from './components/Header';
+import { NewCompraModal } from "./components/NewCompraModal";
 import { NewTransactionModal } from "./components/NewTransactionModal";
 import { SignIn } from "./components/SignIn";
 import { tokenService } from "./services/tokenService";
@@ -11,13 +12,23 @@ import { GlobalStyle } from './styles/global.ts';
 export default function App() {
 
   const [isNewTransactionModalOpen, setIsNewTransactionModalOpen] = useState(false); 
-    
+  
+  const [isNewSingleModalOpen, setIsNewSingleModalOpen] = useState(false);
+
   function handleOpenIsTransactionModal() {
       setIsNewTransactionModalOpen(true);
   }
 
   function handleCloseIsTransactionModal() {
       setIsNewTransactionModalOpen(false);
+  }
+
+  function handleOpenIsSingleModalOpen() {
+    setIsNewSingleModalOpen(true);
+  }
+
+  function handleCloseIsSingleModalOpen() {
+    setIsNewSingleModalOpen(false);
   }
 
   const {currentUser} = useSelector((state) => state.user);
@@ -40,11 +51,14 @@ export default function App() {
       {currentUser && token?
         <>
           <Header onOpenNewTransactionModal={handleOpenIsTransactionModal}/>
-          <Dashboard/>
+          <Dashboard handleOpenIsSingleModalOpen={handleOpenIsSingleModalOpen}/>
           <NewTransactionModal
             isOpen={isNewTransactionModalOpen}
             onRequestClose={handleCloseIsTransactionModal}
           />
+          <NewCompraModal
+            isOpen={isNewSingleModalOpen}
+            onRequestClose={handleCloseIsSingleModalOpen} />
           <GlobalStyle/>
         </>
       :
