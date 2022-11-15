@@ -1,11 +1,34 @@
 import { Container } from "./styles.ts";
 
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import iconmeImg from '../../assets/Entradas.png';
 import outcomeImg from '../../assets/Saidas.png';
 import totalImg from '../../assets/Total.png';
+import { tokenService } from "../../services/tokenService";
 
+export function Summary({transactions}) {
+    const [transaction, setTransaction] = useState([]);
+    const [saidas, setSaidas] = useState();
+    const [entradas, setEntradas] = useState();
 
-export function Summary() {
+    useEffect(() => {
+
+        var pago = 0;
+        var recebido = 0;
+
+        transactions?.map((data) => {
+            console.log("valor: ", data.value)
+            if(data.state==="PAGO" || data.state==="PENDENTE"){
+                pago += data.value;
+            } else {
+                recebido += data.value;
+            }
+        })
+
+        setSaidas(pago);
+        setEntradas(recebido);
+    }, [transactions])
 
     return (
         <Container>
@@ -18,7 +41,7 @@ export function Summary() {
                     {new Intl.NumberFormat('pt-BR', {
                         style: 'currency',
                         currency: 'BRL'
-                    }).format("0")}  
+                    }).format(entradas)}  
                 </strong>
             </div> 
 
@@ -31,11 +54,11 @@ export function Summary() {
                     {new Intl.NumberFormat('pt-BR', {
                         style: 'currency',
                         currency: 'BRL'
-                    }).format("0")}
+                    }).format(saidas)}
                 </strong>
             </div> 
 
-            <div style={{background: 'var(--green)', color: 'var(--shape)'}}>
+            <div style={{background: entradas - saidas >= 0? 'var(--green)' : 'var(--red)', color: 'var(--shape)'}}>
                 <header>
                     <p>Total</p>
                     <img src={totalImg} alt="Entradas" />
@@ -44,7 +67,7 @@ export function Summary() {
                     {new Intl.NumberFormat('pt-BR', {
                         style: 'currency',
                         currency: 'BRL'
-                    }).format("0")}
+                    }).format(entradas - saidas)}
                 </strong>
             </div> 
         </Container>

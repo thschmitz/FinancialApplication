@@ -5,11 +5,8 @@ import { useSelector } from "react-redux";
 import { tokenService } from "../../services/tokenService";
 import { Container } from './styles.ts';
 
-export function TransactionTable({handleOpenIsSingleModalOpen}) {
-
-    const {currentUser} = useSelector((state) => state.user);
-    const [transactions, setTransaction] = useState();
-
+export function TransactionTable({handleOpenIsSingleModalOpen, transactions, setTransactions}) {
+    const token = tokenService.get();
 
     async function reload(e) {
         e.preventDefault();
@@ -18,7 +15,7 @@ export function TransactionTable({handleOpenIsSingleModalOpen}) {
         try{
             const res = await axios({method: "get", url: "http://localhost:5000/api/action/getTransaction", withCredentials: false, headers: {"Content-Type": "application/json", "Authorization": `Bearer ${token}`}});
 
-            setTransaction(res.data);
+            setTransactions(res.data);
         } catch(err) {
             console.log(err);
         }
@@ -64,10 +61,10 @@ export function TransactionTable({handleOpenIsSingleModalOpen}) {
                                     {transactions.time}
                                 </td>
                                 <td>
-                                    {transactions.state === "PAGO"?
-                                    <p className="text-green-800">PAGO</p>
+                                    {transactions.state === "RECEBIDO"?
+                                    <p className="text-green-800">RECEBIDO</p>
                                     :
-                                    <p className="text-red-800">PENDENTE</p>
+                                    <p className="text-red-800">{transactions.state}</p>
                                     }
                                 </td>
                             </tr>

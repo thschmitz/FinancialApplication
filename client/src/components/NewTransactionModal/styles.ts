@@ -1,5 +1,5 @@
-import styled from "styled-components";
 import { darken, transparentize } from "polished";
+import styled from "styled-components";
 
 export const Container = styled.form`
    h1 {
@@ -51,6 +51,7 @@ export const TransactionTypeContainer = styled.div`
      display: grid;
      grid-template-columns: 1fr 1fr;
      gap: 0.5rem;   
+
 `;
 
 interface RadioBoxProps {

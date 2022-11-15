@@ -1,5 +1,6 @@
 import { Jelly } from '@uiball/loaders';
-import { useState } from "react";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Dashboard } from './components/Dashboard';
 import { Header } from './components/Header';
@@ -33,12 +34,25 @@ export default function App() {
 
   const {currentUser} = useSelector((state) => state.user);
   const {loading} = useSelector((state) => state.user);
+  const [transactions, setTransactions] = useState([]);
 
   const token = tokenService.get();
 
-  console.log(currentUser)
-  console.log("Loading: ", loading);
-  
+  useEffect(() => {
+    try{
+            
+      const funcao = async() => {
+          const res = await axios({method: "get", url: "http://localhost:5000/api/action/getTransaction", withCredentials: false, headers: {"Content-Type": "application/json", "Authorization": `Bearer ${token}`}});
+          setTransactions(res.data);
+      }
+
+      funcao();
+
+  } catch(err) {
+      console.log(err);
+  }
+  }, [])
+
   if(loading)
   return(
       <div className="flex w-full items-center justify-center p-20 text-xl">
@@ -55,6 +69,7 @@ export default function App() {
           <NewTransactionModal
             isOpen={isNewTransactionModalOpen}
             onRequestClose={handleCloseIsTransactionModal}
+            transactions={transactions}
           />
           <NewCompraModal
             isOpen={isNewSingleModalOpen}
