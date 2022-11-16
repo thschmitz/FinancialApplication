@@ -46,7 +46,10 @@ export default function App() {
           setTransactions(res.data);
       }
 
+
+
       funcao();
+
 
   } catch(err) {
       console.log(err);

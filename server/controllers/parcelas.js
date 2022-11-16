@@ -3,13 +3,22 @@ import jwt from "jsonwebtoken";
 import { createError } from "../error.js";
 import Parcelas from "../models/Parcelas.js";
 
-export const getParcelas = async(req, res, next) => {
+export const getParcelas = async (req, res, next) => {
+
+    checkParcelas(req);
+    const parcelasResultado = await Parcelas.find({userID: req.user.id});
+
+    res.status(200).json(parcelasResultado);
+}
+
+const checkParcelas = async(req) => {
     var parcelas = await Parcelas.find({userID: req.user.id});
 
     var currentDay = new Date();
 
     for(var i = 0; i < parcelas.length; i++) {
         var novaListaParcelas = [];
+        var novaListaParcelasPagas = [];
         const currentParcela = parcelas[i];
 
         for(var j = 0; j < currentParcela.days.length; j++) {
@@ -17,6 +26,10 @@ export const getParcelas = async(req, res, next) => {
             if(currentDay < parcelaCurrentDay){
                 var novaDate = new Date(parcelaCurrentDay)
                 novaListaParcelas.push(novaDate.getMonth() + 1 + "/" + novaDate.getDate() + "/" + novaDate.getFullYear());
+
+            } else if(currentDay >= parcelaCurrentDay){
+                var novaDate = new Date(parcelaCurrentDay)
+                novaListaParcelasPagas.push(novaDate.getMonth() + 1 + "/" + novaDate.getDate() + "/" + novaDate.getFullYear());
 
             }
         }
@@ -30,12 +43,19 @@ export const getParcelas = async(req, res, next) => {
             }
         }, {new: true})
 
+        if(novaListaParcelasPagas.length > 0) {
+            const updatedDaysParcelaPaga = await Parcelas.findByIdAndUpdate(currentParcela._id, {
+                $set: {
+                    daysPassed: novaListaParcelasPagas
+                }
+            }, {new: true})
+        }
+
+        
+
         
     }
 
-    const parcelasResultado = await Parcelas.find({userID: req.user.id});
-
-    res.status(200).json(parcelasResultado);
 }
 
 export const addParcela = async(req, res, next) => {
@@ -68,6 +88,7 @@ export const addParcela = async(req, res, next) => {
 
     try{
         await parcela.save();
+        checkParcelas(req);
         res.status(200).send("Parcela has been created!");
     }catch(err) {
         next(createError(err));

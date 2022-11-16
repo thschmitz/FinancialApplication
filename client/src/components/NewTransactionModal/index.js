@@ -11,7 +11,7 @@ export function NewTransactionModal({ isOpen,  onRequestClose, transactions})  {
     const [typeAdvanced, setTypeAdvanced] = useState("uniquepay");
     const [title, setTitle] = useState('');
     const [time, setTime] = useState("");
-    const [qtdParcelas, setQtdParcelas] = useState("");
+    const [qtdParcelas, setQtdParcelas] = useState();
     const [amount, setAmount] = useState(0);
     const [category, setCategory] = useState('');
     const [subtitles, setSubtitles] = useState([]);
@@ -27,9 +27,22 @@ export function NewTransactionModal({ isOpen,  onRequestClose, transactions})  {
                 }
             }
         })
+        
         setSubtitles(listaSubtitles);
     }, [isOpen])
 
+
+    function handleCadastrar(e) {
+        e.preventDefault();
+
+        if(type==="withdraw" && typeAdvanced==="installment") {
+            console.log(qtdParcelas, amount, category, title)
+        } else if(type==="withdraw") {
+            console.log(amount, category, title);
+        } else {
+            console.log(amount, category, title);
+        }
+    }
 
     return (
         <Modal 
@@ -119,7 +132,7 @@ export function NewTransactionModal({ isOpen,  onRequestClose, transactions})  {
                 {typeAdvanced==="installment" && type==="withdraw"?
                     <input
                     value={qtdParcelas}
-                    onChange={(e) => setAmount(Number(e.target.value))}
+                    onChange={(e) => setQtdParcelas(Number(e.target.value))}
                     type="number"
                     required
                     placeholder="Quantidade de Parcelas"
@@ -156,7 +169,7 @@ export function NewTransactionModal({ isOpen,  onRequestClose, transactions})  {
                     })}
                 </div>
 
-                <button type="submit">
+                <button type="submit" onClick={(e) => handleCadastrar(e)}>
                     Cadastrar
                 </button>
             </Container>

@@ -11,6 +11,7 @@ export function Summary({transactions}) {
     const [transaction, setTransaction] = useState([]);
     const [saidas, setSaidas] = useState();
     const [entradas, setEntradas] = useState();
+    const [parcelasPagas, setParcelasPagas] = useState(0)
 
     useEffect(() => {
 
@@ -19,16 +20,34 @@ export function Summary({transactions}) {
 
         transactions?.map((data) => {
             console.log("valor: ", data.value)
-            if(data.state==="PAGO" || data.state==="PENDENTE"){
+            if(data.state==="PAGO"){
                 pago += data.value;
             } else {
                 recebido += data.value;
             }
         })
 
-        setSaidas(pago);
+        console.log("pago aqui hein: ", pago)
+        setSaidas(parcelasPagas + pago);
         setEntradas(recebido);
     }, [transactions])
+
+    useEffect(() => {
+        var pago = 0;
+        var recebido = 0;
+        const token = tokenService.get();
+        const parcelas = async() => {
+            const res = await axios({method: "get", url: "http://localhost:5000/api/action/getParcelas", withCredentials: false, headers: {"Content-Type": "application/json", "Authorization": `Bearer ${token}`}})
+            for(var i = 0; i < res.data.length; i ++) {
+                console.log(res.data[i].value, res.data[i].daysPassed.length)
+                setParcelasPagas(res.data[i].value * res.data[i].daysPassed.length);
+            }
+        }
+
+        parcelas();
+
+        console.log("parcelasPagas: ", parcelasPagas)
+    }, [])
 
     return (
         <Container>

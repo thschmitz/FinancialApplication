@@ -17,6 +17,9 @@ const ParcelaSchema = new mongoose.Schema({
         type: Array,
         required: true,
     },
+    daysPassed: {
+        type: Array
+    },
     numero: {
         type: Number,
         required:true,
