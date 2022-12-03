@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { tokenService } from "../../services/tokenService";
 import { Container } from './styles.ts';
 
-export function TransactionTable({handleOpenIsSingleModalOpen, transactions, setTransactions}) {
+export function TransactionTable({handleOpenIsSingleModalOpen, transactions, setTransactions, parceladas, setParceladas}) {
     const token = tokenService.get();
 
     async function reload(e) {
@@ -15,14 +15,28 @@ export function TransactionTable({handleOpenIsSingleModalOpen, transactions, set
         try{
             const res = await axios({method: "get", url: "http://localhost:5000/api/action/getTransaction", withCredentials: false, headers: {"Content-Type": "application/json", "Authorization": `Bearer ${token}`}});
 
+            const resParcelado = await axios({method: "get", url: "http://localhost:5000/api/action/getParceladas", withCredentials: false, headers: {"Content-Type": "application/json", "Authorization": `Bearer ${token}`}}); 
+
             setTransactions(res.data);
+            setParceladas(resParcelado.data);
         } catch(err) {
             console.log(err);
         }
 
     }
 
-    console.log("Transaction: ", transactions)
+    function dataFinalParcelada(parcela) {
+        let data = parcela.days[parcela.days.length - 1]
+
+        console.log("AAA:", data);
+        let valoresDivididos = data.split("/");
+        let valorFinal = valoresDivididos[1] + "/" + valoresDivididos[0] + "/" + valoresDivididos[2];
+
+        return valorFinal;
+
+    }
+
+    console.log("Transaction: ", parceladas)
 
     return (
         <Container>
@@ -66,6 +80,49 @@ export function TransactionTable({handleOpenIsSingleModalOpen, transactions, set
                                     :
                                     <p className="text-red-800">{transactions.state}</p>
                                     }
+                                </td>
+                            </tr>
+                        )
+                    })}
+                </tbody>
+            </table>
+
+
+            <table className="mt-10">
+                <thead>
+                    <tr>
+                        <th className='Title'>Título</th>
+                        <th>Valor Parcela</th>
+                        <th>Categoria</th>
+                        <th>Data</th>
+                        <th>Qtd Parcelas</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    
+                    {parceladas?.map(parcelada => {
+                        return (
+                            <tr key={parcelada._id}>
+                                <td onClick={handleOpenIsSingleModalOpen}>{parcelada.name}</td>
+                                <td className={parcelada.type}>
+
+                                    {new Intl.NumberFormat('pt-BR', {
+                                        style: 'currency',
+                                        currency: 'BRL'
+                                    }).format(parcelada.value)}
+                                </td> 
+                                <td>{parcelada.subtitle}</td>
+                                <td>
+                                    {parcelada.time} - {dataFinalParcelada(parcelada)}
+                                </td>
+                                <td>
+                                    {parcelada.numero}
+                                </td>
+                                <td>
+
+                                    <p className="text-red-800">PARCELADO</p>
                                 </td>
                             </tr>
                         )

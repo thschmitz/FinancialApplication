@@ -34,13 +34,16 @@ export function Summary({transactions}) {
 
     useEffect(() => {
         const token = tokenService.get();
+        let valorPago = 0;
         const parcelas = async() => {
             const res = await axios({method: "get", url: "http://localhost:5000/api/action/getParcelas", withCredentials: false, headers: {"Content-Type": "application/json", "Authorization": `Bearer ${token}`}})
             for(var i = 0; i < res.data.length; i ++) {
                 console.log(res.data[i].value, res.data[i].daysPassed.length)
-                setParcelasPagas(res.data[i].value * res.data[i].daysPassed.length);
+                valorPago += res.data[i].value * res.data[i].daysPassed.length
             }
+            setParcelasPagas(valorPago);
         }
+
 
         parcelas();
 
