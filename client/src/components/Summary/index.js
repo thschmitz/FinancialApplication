@@ -33,8 +33,6 @@ export function Summary({transactions}) {
     }, [transactions])
 
     useEffect(() => {
-        var pago = 0;
-        var recebido = 0;
         const token = tokenService.get();
         const parcelas = async() => {
             const res = await axios({method: "get", url: "http://localhost:5000/api/action/getParcelas", withCredentials: false, headers: {"Content-Type": "application/json", "Authorization": `Bearer ${token}`}})

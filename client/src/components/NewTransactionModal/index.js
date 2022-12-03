@@ -12,10 +12,10 @@ export function NewTransactionModal({ isOpen,  onRequestClose, transactions})  {
     const [title, setTitle] = useState('');
     const [time, setTime] = useState("");
     const [qtdParcelas, setQtdParcelas] = useState();
-    const [amount, setAmount] = useState(0);
+    const [amount, setAmount] = useState();
     const [category, setCategory] = useState('');
     const [subtitles, setSubtitles] = useState([]);
-
+    const [currentDataAtual, setCurrentDataAtual] = useState([]);
 
     useEffect(() => {
         var listaSubtitles = [];
@@ -28,6 +28,27 @@ export function NewTransactionModal({ isOpen,  onRequestClose, transactions})  {
             }
         })
         
+        let currentDate = new Date();
+
+        let currentDia = currentDate.getDate();
+        let currentMes = currentDate.getMonth() + 1;
+        let currentAno = currentDate.getFullYear();
+
+        if(currentDia < 10) {
+            currentDia = "0"+currentDia;
+        }
+
+        if(currentMes < 10) {
+            currentMes = "0"+currentMes;
+        }
+
+        if(currentMes >= 13) {
+            currentMes = "1";
+        }
+
+        let dayFormatted = currentAno + "-" + currentMes + "-" + currentDia;
+
+        setCurrentDataAtual(dayFormatted);
         setSubtitles(listaSubtitles);
     }, [isOpen])
 
@@ -42,6 +63,13 @@ export function NewTransactionModal({ isOpen,  onRequestClose, transactions})  {
         } else {
             console.log(amount, category, title);
         }
+    }
+
+    function handleCategory(e, subtitle) {
+        e.preventDefault();
+
+
+        setCategory(subtitle)
     }
 
     return (
@@ -70,11 +98,11 @@ export function NewTransactionModal({ isOpen,  onRequestClose, transactions})  {
                     required
                 />
 
-                 <input
+                <input
                     value={amount}
                     onChange={(e) => setAmount(Number(e.target.value))}
                     type='number'
-                    placeholer="Valor"
+                    placeholder="Valor da compra"
                     required
                 />
 
@@ -130,22 +158,29 @@ export function NewTransactionModal({ isOpen,  onRequestClose, transactions})  {
                 }
 
                 {typeAdvanced==="installment" && type==="withdraw"?
-                    <input
-                    value={qtdParcelas}
-                    onChange={(e) => setQtdParcelas(Number(e.target.value))}
-                    type="number"
-                    required
-                    placeholder="Quantidade de Parcelas"
-                    />    
+                    <div>
+                        <input
+                        value={qtdParcelas}
+                        onChange={(e) => setQtdParcelas(Number(e.target.value))}
+                        type="number"
+                        required
+                        placeholder="Quantidade de Parcelas"
+                        />   
+                        
+                        <input
+                        value={qtdParcelas}
+                        onChange={(e) => setQtdParcelas(Number(e.target.value))}
+                        type="number"
+                        required
+                        placeholder="Valor das Parcelas"
+                        />    
+                    </div>
+
                 :
                 ""}
 
-                <input
-                    value={time}
-                    onChange={(e) => setTime(e.target.value)}
-                    required={false}
-                    placeholder="Dia"
-                />
+                <input id="date" type="date" value={currentDataAtual} className="mt-5"></input>
+
                 <input
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
@@ -160,10 +195,9 @@ export function NewTransactionModal({ isOpen,  onRequestClose, transactions})  {
                 <div className="flex flex-wrap justify-center">
                     {subtitles?.map((subtitle) => {
                         return(
-                            <div className="border p-3 m-0.5 border-gray-300 rounded-lg text-center max-w-fit">
-                                <button>{subtitle}</button>
-                                    
-                            </div>
+                            <button onClick={(e) => handleCategory(e, subtitle)} className="border p-3 m-0.5 border-gray-300 rounded-lg text-center max-w-fit">
+                                <p>{subtitle}</p>
+                            </button>
                             
                         )
                     })}
