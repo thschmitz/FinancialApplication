@@ -4,6 +4,7 @@ import Modal from 'react-modal';
 import closeImg from '../../assets/close.png';
 import incomeImg from '../../assets/Entradas.png';
 import outcomeImg from '../../assets/Saidas.png';
+import { tokenService } from "../../services/tokenService";
 import { Container, RadioBox, TransactionTypeContainer } from "./styles.ts";
 
 export function NewTransactionModal({ isOpen,  onRequestClose, transactions})  {
@@ -53,12 +54,16 @@ export function NewTransactionModal({ isOpen,  onRequestClose, transactions})  {
     }, [isOpen])
 
 
-    function handleCadastrar(e) {
+    async function handleCadastrar(e) {
         e.preventDefault();
-
+        const token = tokenService.get();
+        // const res = await axios({method: "get", url: "http://localhost:5000/api/action/getParcelas", withCredentials: false, headers: {"Content-Type": "application/json", "Authorization": `Bearer ${token}`}})
+        // setParceladas(res.data);
         if(type==="withdraw" && typeAdvanced==="installment") {
             // name, subtitle, value, numero, time
-            console.log(title, category, amount, qtdParcelas,  currentDataAtual)
+            const res = await axios.post("http://localhost:5000/api/action/addParcela", {name: title, subtitle: category, value: amount, numero: qtdParcelas, time: currentDataAtual}, { headers: {"Content-Type": "application/json", "Authorization": `Bearer ${token}`}})
+            console.log(res.data);
+            // console.log(title, category, amount, qtdParcelas,  currentDataAtual)
         } else if(type==="withdraw") {
             // name, subtitle, value, time, state
             console.log(amount, category, title, currentDataAtual);

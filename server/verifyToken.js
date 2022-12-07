@@ -4,6 +4,8 @@ import { createError } from "./error.js";
 export const verifyToken = (req, res, next) => {
     console.log("Verificando")
     const authHeader = req.headers["x-authorization"] || req.headers["authorization"] || "";
+    console.log(authHeader)
+
     const token = authHeader?.split(" ")[authHeader?.split(" ").length - 1];
 
     console.log(token);
