@@ -68,7 +68,7 @@ export default function App() {
       {currentUser && token?
         <>
           <Header onOpenNewTransactionModal={handleOpenIsTransactionModal}/>
-          <Dashboard handleOpenIsSingleModalOpen={handleOpenIsSingleModalOpen}/>
+          <Dashboard handleOpenIsSingleModalOpen={handleOpenIsSingleModalOpen} isNewSingleModalOpen={handleOpenIsSingleModalOpen}/>
           <NewTransactionModal
             isOpen={isNewTransactionModalOpen}
             onRequestClose={handleCloseIsTransactionModal}
@@ -77,6 +77,7 @@ export default function App() {
           <NewCompraModal
             isOpen={isNewSingleModalOpen}
             onRequestClose={handleCloseIsSingleModalOpen} />
+          
           <GlobalStyle/>
         </>
       :
