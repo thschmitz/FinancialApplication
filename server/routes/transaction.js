@@ -17,7 +17,4 @@ router.put("/updateTransaction", verifyToken, updateTransaction);
 
 router.delete("/deleteTransaction", verifyToken, deleteTransaction);
 
-
-
-
 export default router;

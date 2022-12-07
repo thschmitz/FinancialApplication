@@ -66,10 +66,14 @@ export function NewTransactionModal({ isOpen,  onRequestClose, transactions})  {
             // console.log(title, category, amount, qtdParcelas,  currentDataAtual)
         } else if(type==="withdraw") {
             // name, subtitle, value, time, state
-            console.log(amount, category, title, currentDataAtual);
+            const res = await axios.post("http://localhost:5000/api/action/addTransaction", {name: title, subtitle: category, value: amount, time: currentDataAtual, state: "PAGO"}, {headers: {"Content-Type": "application/json", "Authorization": `Bearer ${token}`}})
+            console.log(res.data);
+            // console.log(amount, category, title, currentDataAtual);
         } else {
             // name, subtitle, value, time, state
-            console.log(title, category, amount, currentDataAtual, "RECEBIDO");
+            const res = await axios.post("http://localhost:5000/api/action/addTransaction", {name: title, subtitle: category, value: amount, time: currentDataAtual ,state: "RECEBIDO"}, {headers: {"Content-Type": "application/json", "Authorization": `Bearer ${token}`}})
+            console.log(res.data);
+            // console.log(title, category, amount, currentDataAtual, "RECEBIDO");
         }
     }
 

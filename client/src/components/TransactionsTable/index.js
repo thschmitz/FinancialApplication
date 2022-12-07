@@ -14,9 +14,9 @@ export function TransactionTable({handleOpenIsSingleModalOpen, transactions, set
         const token = tokenService.get();
 
         try{
-            const res = await axios({method: "get", url: "http://localhost:5000/api/action/getTransaction", withCredentials: false, headers: {"Content-Type": "application/json", "Authorization": `Bearer ${token}`}});
+            const res = await axios.get("http://localhost:5000/api/action/getTransaction", {headers: {"Content-Type": "application/json", "Authorization": `Bearer ${token}`}});
 
-            const resParcelado = await axios({method: "get", url: "http://localhost:5000/api/action/getParceladas", withCredentials: false, headers: {"Content-Type": "application/json", "Authorization": `Bearer ${token}`}}); 
+            const resParcelado = await axios.get("http://localhost:5000/api/action/getParcelas",{ headers: {"Content-Type": "application/json", "Authorization": `Bearer ${token}`}}); 
 
             setTransactions(res.data);
             setParceladas(resParcelado.data);
@@ -36,8 +36,6 @@ export function TransactionTable({handleOpenIsSingleModalOpen, transactions, set
         return valorFinal;
 
     }
-
-    console.log("Transaction: ", parceladas)
 
     if(!transactions || !parceladas) {
         return (
