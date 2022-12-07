@@ -1,4 +1,5 @@
 import CachedIcon from '@mui/icons-material/Cached';
+import { Jelly } from '@uiball/loaders';
 import axios from 'axios';
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -37,6 +38,14 @@ export function TransactionTable({handleOpenIsSingleModalOpen, transactions, set
     }
 
     console.log("Transaction: ", parceladas)
+
+    if(!transactions || !parceladas) {
+        return (
+            <div className="flex w-full items-center justify-center p-20 text-xl">
+                <Jelly size={50} color="#ff4501"/>
+            </div>
+        )
+    }
 
     return (
         <Container>

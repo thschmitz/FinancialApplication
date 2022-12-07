@@ -57,17 +57,19 @@ export function NewTransactionModal({ isOpen,  onRequestClose, transactions})  {
         e.preventDefault();
 
         if(type==="withdraw" && typeAdvanced==="installment") {
-            console.log(qtdParcelas, amount, category, title)
+            // name, subtitle, value, numero, time
+            console.log(title, category, amount, qtdParcelas,  currentDataAtual)
         } else if(type==="withdraw") {
-            console.log(amount, category, title);
+            // name, subtitle, value, time, state
+            console.log(amount, category, title, currentDataAtual);
         } else {
-            console.log(amount, category, title);
+            // name, subtitle, value, time, state
+            console.log(title, category, amount, currentDataAtual, "RECEBIDO");
         }
     }
 
     function handleCategory(e, subtitle) {
         e.preventDefault();
-
 
         setCategory(subtitle)
     }
@@ -166,20 +168,13 @@ export function NewTransactionModal({ isOpen,  onRequestClose, transactions})  {
                         required
                         placeholder="Quantidade de Parcelas"
                         />   
-                        
-                        <input
-                        value={qtdParcelas}
-                        onChange={(e) => setQtdParcelas(Number(e.target.value))}
-                        type="number"
-                        required
-                        placeholder="Valor das Parcelas"
-                        />    
+
                     </div>
 
                 :
                 ""}
 
-                <input id="date" type="date" value={currentDataAtual} className="mt-5"></input>
+                <input id="date" type="date" value={currentDataAtual} className="mt-5" onChange={(e) => setCurrentDataAtual(e.target.value)}></input>
 
                 <input
                     value={category}
