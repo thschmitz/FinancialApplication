@@ -10,10 +10,11 @@ import { SignIn } from "./components/SignIn";
 import { tokenService } from "./services/tokenService";
 import { GlobalStyle } from './styles/global.ts';
 
+
 export default function App() {
 
   const [isNewTransactionModalOpen, setIsNewTransactionModalOpen] = useState(false); 
-  
+  const [data, setData] = useState();
   const [isNewSingleModalOpen, setIsNewSingleModalOpen] = useState(false);
 
   function handleOpenIsTransactionModal() {
@@ -68,7 +69,7 @@ export default function App() {
       {currentUser && token?
         <>
           <Header onOpenNewTransactionModal={handleOpenIsTransactionModal}/>
-          <Dashboard handleOpenIsSingleModalOpen={handleOpenIsSingleModalOpen} isNewSingleModalOpen={handleOpenIsSingleModalOpen}/>
+          <Dashboard handleOpenIsSingleModalOpen={handleOpenIsSingleModalOpen} isNewSingleModalOpen={handleOpenIsSingleModalOpen} setData={setData}/>
           <NewTransactionModal
             isOpen={isNewTransactionModalOpen}
             onRequestClose={handleCloseIsTransactionModal}
@@ -76,7 +77,8 @@ export default function App() {
           />
           <NewCompraModal
             isOpen={isNewSingleModalOpen}
-            onRequestClose={handleCloseIsSingleModalOpen} />
+            onRequestClose={handleCloseIsSingleModalOpen} 
+            data={data}/>
           
           <GlobalStyle/>
         </>

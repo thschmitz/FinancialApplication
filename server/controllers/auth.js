@@ -6,7 +6,6 @@ import User from "../models/User.js";
 
 export const signup = async(req, res, next) => {
     try{
-        console.log(req.body)
         const salt = bcrypt.genSaltSync(10);
         const hash = bcrypt.hashSync(req.body.password, salt);
         const newUser = new User({...req.body, password:hash}); // With the password bcrypted
@@ -29,7 +28,6 @@ export const signin = async(req, res, next) => {
         if (!isCorrect) return next(createError(400, "Wrong Credentials!"));
     
         const token = jwt.sign({ id: user._id }, process.env.ACCESS_TOKEN_KEY);
-        console.log(token);
         const { password, ...others } = user._doc;
     
         res

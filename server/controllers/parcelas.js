@@ -1,5 +1,3 @@
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
 import { createError } from "../error.js";
 import Parcelas from "../models/Parcelas.js";
 
@@ -34,9 +32,6 @@ const checkParcelas = async(req) => {
             }
         }
 
-        console.log("teste: ", novaListaParcelas)
-
-
         const updatedDaysParcela = await Parcelas.findByIdAndUpdate(currentParcela._id, {
             $set: {
                 days: novaListaParcelas
@@ -50,10 +45,6 @@ const checkParcelas = async(req) => {
                 }
             }, {new: true})
         }
-
-        
-
-        
     }
 
 }
@@ -66,8 +57,6 @@ export const addParcela = async(req, res, next) => {
     var month = partesTime[1]
     var year = partesTime[0]
     var day = partesTime[2]
-
-    console.log(day + "/" + month + "/" + year)
 
     // dar uma olhada por causa do ano bissexto!
     for(let i = 0; i < req.body.numero; i++) {
@@ -83,7 +72,6 @@ export const addParcela = async(req, res, next) => {
         month+=1;
     }
 
-    console.log("opa: " ,lista)
 
     var timeFinal = partesTime[2] + "/" + partesTime[1] + "/" + partesTime[0];
 

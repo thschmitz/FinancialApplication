@@ -5,7 +5,7 @@ import { Summary } from "../Summary";
 import { TransactionTable } from "../TransactionsTable";
 import { Container } from "./styles.ts";
 
-export function Dashboard({handleOpenIsSingleModalOpen, isNewSingleModalOpen}) {
+export function Dashboard({handleOpenIsSingleModalOpen, isNewSingleModalOpen, setData}) {
 
     // In this component i need to add the tabs to make the choice to which component i wanna see
     const [transactions, setTransactions] = useState();
@@ -36,7 +36,7 @@ export function Dashboard({handleOpenIsSingleModalOpen, isNewSingleModalOpen}) {
     return (
         <Container>
             <Summary transactions={transactions}/>
-            <TransactionTable handleOpenIsSingleModalOpen={handleOpenIsSingleModalOpen} transactions={transactions} setTransactions={setTransactions} parceladas={parceladas} setParceladas={setParceladas} isNewSingleModalOpen={isNewSingleModalOpen}/>
+            <TransactionTable handleOpenIsSingleModalOpen={handleOpenIsSingleModalOpen} transactions={transactions} setTransactions={setTransactions} parceladas={parceladas} setParceladas={setParceladas} isNewSingleModalOpen={isNewSingleModalOpen} setData={setData}/>
         </Container>
     )
 }

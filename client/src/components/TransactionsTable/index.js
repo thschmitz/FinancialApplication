@@ -2,17 +2,19 @@ import CachedIcon from '@mui/icons-material/Cached';
 import { Jelly } from '@uiball/loaders';
 import axios from 'axios';
 import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { BrowserRouter, NavLink } from "react-router-dom";
 import { tokenService } from "../../services/tokenService";
 import { Container } from './styles.ts';
 
-export function TransactionTable({handleOpenIsSingleModalOpen, transactions, setTransactions, parceladas, setParceladas, isNewSingleModalOpen}) {
+export function TransactionTable({handleOpenIsSingleModalOpen, transactions, setTransactions, parceladas, setParceladas, isNewSingleModalOpen, setData}) {
     const token = tokenService.get();
 
     async function reload(e) {
         e.preventDefault();
         const token = tokenService.get();
+        const notification = toast.loading("Creating new Post...");
 
         try{
             const res = await axios.get("http://localhost:5000/api/action/getTransaction", {headers: {"Content-Type": "application/json", "Authorization": `Bearer ${token}`}});
@@ -21,6 +23,8 @@ export function TransactionTable({handleOpenIsSingleModalOpen, transactions, set
 
             setTransactions(res.data);
             setParceladas(resParcelado.data);
+
+            console.log("PASSOU")
         } catch(err) {
             console.log(err);
         }
@@ -45,6 +49,16 @@ export function TransactionTable({handleOpenIsSingleModalOpen, transactions, set
             </div>
         )
     }
+
+    function handleOpenSpecific(e, transactions) {
+        e.preventDefault();
+        setData(transactions);
+
+        isNewSingleModalOpen();
+
+
+    }
+
 
     return (
         <BrowserRouter>
@@ -71,7 +85,7 @@ export function TransactionTable({handleOpenIsSingleModalOpen, transactions, set
                         {transactions?.map(transactions => {
                             return (
                                 <tr key={transactions._id}>
-                                    <td onClick={isNewSingleModalOpen}>{transactions.name}</td>
+                                    <td onClick={(e) => handleOpenSpecific(e, transactions)} className="cursor-pointer">{transactions.name}</td>
                                     <td className={transactions.type}>
 
                                         {new Intl.NumberFormat('pt-BR', {
@@ -114,7 +128,7 @@ export function TransactionTable({handleOpenIsSingleModalOpen, transactions, set
                         {parceladas?.map(parcelada => {
                             return (
                                 <tr key={parcelada._id}>
-                                    <td onClick={isNewSingleModalOpen}>{parcelada.name}</td>
+                                    <td onClick={(e) => handleOpenSpecific(e, parcelada)} className="cursor-pointer">{parcelada.name}</td>
                                     <td className={parcelada.type}>
 
                                         {new Intl.NumberFormat('pt-BR', {

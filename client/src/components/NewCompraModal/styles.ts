@@ -26,11 +26,35 @@ export const Container = styled.form`
         }
     }   
 
-    button[type="submit"]{
+    button[type="submit"].editar{
         width: 100%;
         padding: 0 1.5rem;
         height: 4rem;
         background: var(--green);
+        color: var(--shape);
+        border-radius: 0.25rem;
+        border: 0;
+        margin-top: 1rem;
+        font-size: 1rem; 
+        font-weight: 600;
+
+        transition: 0.2s;
+
+        &:hover {
+            filter: brightness(0.9);
+        }
+    }
+
+    p {
+        padding: 10px;
+        
+    }
+
+    button[type="submit"].deletar{
+        width: 100%;
+        padding: 0 1.5rem;
+        height: 4rem;
+        background: var(--red);
         color: var(--shape);
         border-radius: 0.25rem;
         border: 0;

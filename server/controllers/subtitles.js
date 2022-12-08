@@ -16,7 +16,6 @@ export const addSubtitle = async(req, res, next) => {
 export const getSubtitle = async(req, res, next) => {
     try{
         const subtitles = await Subtitle.find({userID: req.user.id})
-        console.log("SubstitlesTest: ", subtitles)
         res.status(200).json(subtitles);
     } catch(err) {
         next(createError(err));
