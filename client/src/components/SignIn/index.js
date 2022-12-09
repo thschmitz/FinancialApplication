@@ -16,8 +16,6 @@ export function SignIn() {
     const dispatch = useDispatch();
     const {currentUser} = useSelector((state) => state.user);
 
-    console.log("CurrentUser: ", currentUser);
-
     function funcoes(){
         document.querySelector(`#nomeCriar`).value = "";
         document.querySelector(`#emailCriar`).value = "";
@@ -45,8 +43,6 @@ export function SignIn() {
 
         try{
             const res = await axios({method: "post", url: "http://localhost:5000/api/auth/signin", data: {email: email, password: password}});
-            console.log(res?.data);
-
             tokenService.save(res.data.token);
 
             dispatch(loginSuccess(res.data.others));

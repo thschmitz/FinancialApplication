@@ -31,7 +31,7 @@ export function Dashboard({handleOpenIsSingleModalOpen, isNewSingleModalOpen, se
         } catch(err) {
             console.log(err);
         }
-    }, [])
+    }, [transactions])
 
     return (
         <Container>

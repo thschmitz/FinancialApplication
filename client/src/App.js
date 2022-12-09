@@ -10,7 +10,6 @@ import { SignIn } from "./components/SignIn";
 import { tokenService } from "./services/tokenService";
 import { GlobalStyle } from './styles/global.ts';
 
-
 export default function App() {
 
   const [isNewTransactionModalOpen, setIsNewTransactionModalOpen] = useState(false); 
@@ -46,15 +45,10 @@ export default function App() {
           const res = await axios({method: "get", url: "http://localhost:5000/api/action/getTransaction", withCredentials: false, headers: {"Content-Type": "application/json", "Authorization": `Bearer ${token}`}});
           setTransactions(res.data);
       }
-
-
-
       funcao();
-
-
-  } catch(err) {
-      console.log(err);
-  }
+    } catch(err) {
+        console.log(err);
+    }
   }, [])
 
   if(loading)
@@ -81,6 +75,7 @@ export default function App() {
             data={data}/>
           
           <GlobalStyle/>
+
         </>
       :
         <>

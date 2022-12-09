@@ -30,6 +30,7 @@ const checkParcelas = async(req) => {
                 novaListaParcelasPagas.push(novaDate.getMonth() + 1 + "/" + novaDate.getDate() + "/" + novaDate.getFullYear());
 
             }
+
         }
 
         const updatedDaysParcela = await Parcelas.findByIdAndUpdate(currentParcela._id, {
@@ -54,26 +55,31 @@ export const addParcela = async(req, res, next) => {
     const lista = [];
     var partesTime = req.body.time.split("-");
 
-    var month = partesTime[1]
-    var year = partesTime[0]
-    var day = partesTime[2]
+    var month = parseInt(partesTime[1]);
+    var year = parseInt(partesTime[0]);
+    var day = parseInt(partesTime[2]);
+
+    console.log(year + 1, req.body.time)
 
     // dar uma olhada por causa do ano bissexto!
     for(let i = 0; i < req.body.numero; i++) {
 
-
+        console.log(month)
         if(month > 12) {
             month = 1;
-            year+=1;
+            year = year + 1;
         }
 
-        var dataCompleta = month + "/" + day + "/" + year;
+        var dataCompleta = day + "/" + month + "/" + year;
         lista.push(dataCompleta);
         month+=1;
     }
 
 
-    var timeFinal = partesTime[2] + "/" + partesTime[1] + "/" + partesTime[0];
+
+    var timeFinal = parseInt(partesTime[2]) + "/" + parseInt(partesTime[1]) + "/" + parseInt(partesTime[0]);
+
+    console.log(lista)
 
     const parcela = new Parcelas({name: req.body.name, subtitle: req.body.subtitle, value: req.body.value, days: lista, numero: req.body.numero, time: timeFinal, userID: req.user.id});
 

@@ -24,7 +24,6 @@ export function TransactionTable({handleOpenIsSingleModalOpen, transactions, set
             setTransactions(res.data);
             setParceladas(resParcelado.data);
 
-            console.log("PASSOU")
         } catch(err) {
             console.log(err);
         }
@@ -34,7 +33,6 @@ export function TransactionTable({handleOpenIsSingleModalOpen, transactions, set
     function dataFinalParcelada(parcela) {
         let data = parcela.days[parcela.days.length - 1]
 
-        console.log("AAA:", data);
         let valoresDivididos = data.split("/");
         let valorFinal = valoresDivididos[1] + "/" + valoresDivididos[0] + "/" + valoresDivididos[2];
 

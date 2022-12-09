@@ -8,7 +8,6 @@ import totalImg from '../../assets/Total.png';
 import { tokenService } from "../../services/tokenService";
 
 export function Summary({transactions}) {
-    const [transaction, setTransaction] = useState([]);
     const [saidas, setSaidas] = useState();
     const [entradas, setEntradas] = useState();
     const [parcelasPagas, setParcelasPagas] = useState(0)
@@ -19,7 +18,6 @@ export function Summary({transactions}) {
         var recebido = 0;
 
         transactions?.map((data) => {
-            console.log("valor: ", data.value)
             if(data.state==="PAGO"){
                 pago += data.value;
             } else {
@@ -27,7 +25,6 @@ export function Summary({transactions}) {
             }
         })
 
-        console.log("pago aqui hein: ", pago)
         setSaidas(parcelasPagas + pago);
         setEntradas(recebido);
     }, [transactions])
@@ -38,8 +35,7 @@ export function Summary({transactions}) {
         const parcelas = async() => {
             const res = await axios({method: "get", url: "http://localhost:5000/api/action/getParcelas", withCredentials: false, headers: {"Content-Type": "application/json", "Authorization": `Bearer ${token}`}})
             for(var i = 0; i < res.data.length; i ++) {
-                console.log(res.data[i].value, res.data[i].daysPassed.length)
-                valorPago += res.data[i].value * res.data[i].daysPassed.length
+                valorPago += (res.data[i].value / res.data[i].numero) * res.data[i].daysPassed.length
             }
             setParcelasPagas(valorPago);
         }
@@ -47,8 +43,7 @@ export function Summary({transactions}) {
 
         parcelas();
 
-        console.log("parcelasPagas: ", parcelasPagas)
-    }, [])
+    }, [transactions])
 
     return (
         <Container>

@@ -18,6 +18,8 @@ export function NewTransactionModal({ isOpen,  onRequestClose, transactions})  {
     const [subtitles, setSubtitles] = useState([]);
     const [currentDataAtual, setCurrentDataAtual] = useState([]);
 
+
+
     useEffect(() => {
         var listaSubtitles = [];
         transactions.map((transaction) => {
@@ -57,24 +59,24 @@ export function NewTransactionModal({ isOpen,  onRequestClose, transactions})  {
     async function handleCadastrar(e) {
         e.preventDefault();
         const token = tokenService.get();
-        // const res = await axios({method: "get", url: "http://localhost:5000/api/action/getParcelas", withCredentials: false, headers: {"Content-Type": "application/json", "Authorization": `Bearer ${token}`}})
-        // setParceladas(res.data);
-        if(type==="withdraw" && typeAdvanced==="installment") {
-            // name, subtitle, value, numero, time
-            const res = await axios.post("http://localhost:5000/api/action/addParcela", {name: title, subtitle: category, value: amount, numero: qtdParcelas, time: currentDataAtual}, { headers: {"Content-Type": "application/json", "Authorization": `Bearer ${token}`}})
-            console.log(res.data);
-            // console.log(title, category, amount, qtdParcelas,  currentDataAtual)
-        } else if(type==="withdraw") {
-            // name, subtitle, value, time, state
-            const res = await axios.post("http://localhost:5000/api/action/addTransaction", {name: title, subtitle: category, value: amount, time: currentDataAtual, state: "PAGO"}, {headers: {"Content-Type": "application/json", "Authorization": `Bearer ${token}`}})
-            console.log(res.data);
-            // console.log(amount, category, title, currentDataAtual);
-        } else {
-            // name, subtitle, value, time, state
-            const res = await axios.post("http://localhost:5000/api/action/addTransaction", {name: title, subtitle: category, value: amount, time: currentDataAtual ,state: "RECEBIDO"}, {headers: {"Content-Type": "application/json", "Authorization": `Bearer ${token}`}})
-            console.log(res.data);
-            // console.log(title, category, amount, currentDataAtual, "RECEBIDO");
+
+        try{
+            if(type==="withdraw" && typeAdvanced==="installment") {
+                // name, subtitle, value, numero, time
+                const res = await axios.post("http://localhost:5000/api/action/addParcela", {name: title, subtitle: category, value: amount, numero: qtdParcelas, time: currentDataAtual}, { headers: {"Content-Type": "application/json", "Authorization": `Bearer ${token}`}})
+            } else if(type==="withdraw") {
+                // name, subtitle, value, time, state
+                const res = await axios.post("http://localhost:5000/api/action/addTransaction", {name: title, subtitle: category, value: amount, time: currentDataAtual, state: "PAGO"}, {headers: {"Content-Type": "application/json", "Authorization": `Bearer ${token}`}})
+            } else {
+                // name, subtitle, value, time, state
+                const res = await axios.post("http://localhost:5000/api/action/addTransaction", {name: title, subtitle: category, value: amount, time: currentDataAtual ,state: "RECEBIDO"}, {headers: {"Content-Type": "application/json", "Authorization": `Bearer ${token}`}})
+            }
+        } catch(err) {
+            console.log(err);
         }
+        
+
+
     }
 
     function handleCategory(e, subtitle) {
@@ -91,6 +93,8 @@ export function NewTransactionModal({ isOpen,  onRequestClose, transactions})  {
             className="react-modal-content"
         >
             <Container >
+
+
                 <button 
                     type='button' 
                     onClick={onRequestClose} 
