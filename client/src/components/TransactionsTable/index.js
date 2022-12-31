@@ -14,7 +14,6 @@ export function TransactionTable({handleOpenIsSingleModalOpen, transactions, set
     async function reload(e) {
         e.preventDefault();
         const token = tokenService.get();
-        const notification = toast.loading("Creating new Post...");
 
         try{
             const res = await axios.get("http://localhost:5000/api/action/getTransaction", {headers: {"Content-Type": "application/json", "Authorization": `Bearer ${token}`}});
@@ -33,10 +32,16 @@ export function TransactionTable({handleOpenIsSingleModalOpen, transactions, set
     function dataFinalParcelada(parcela) {
         let data = parcela.days[parcela.days.length - 1]
 
-        let valoresDivididos = data.split("/");
-        let valorFinal = valoresDivididos[1] + "/" + valoresDivididos[0] + "/" + valoresDivididos[2];
+        if(parcela.days[0]) {
+            let valoresDivididos = data.split("/");
+            let valorFinal = valoresDivididos[1] + "/" + valoresDivididos[0] + "/" + valoresDivididos[2];
+    
+            return valorFinal;
+        } else {
+            return "Acabou"
+        }
 
-        return valorFinal;
+        
 
     }
 

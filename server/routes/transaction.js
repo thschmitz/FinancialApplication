@@ -13,7 +13,7 @@ router.post("/addParcela", verifyToken, addParcela);
 
 router.post("/addTransaction", verifyToken, addTransaction);
 
-router.put("/updateTransaction", verifyToken, updateTransaction);
+router.put("/updateTransaction/:id", verifyToken, updateTransaction);
 
 router.delete("/deleteTransaction", verifyToken, deleteTransaction);
 

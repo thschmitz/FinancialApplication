@@ -20,27 +20,28 @@ const checkParcelas = async(req) => {
         const currentParcela = parcelas[i];
 
         for(var j = 0; j < currentParcela.days.length; j++) {
-            var parcelaCurrentDay = new Date(currentParcela.days[j]);
-            if(currentDay < parcelaCurrentDay){
-                var novaDate = new Date(parcelaCurrentDay)
-                novaListaParcelas.push(novaDate.getMonth() + 1 + "/" + novaDate.getDate() + "/" + novaDate.getFullYear());
+            var parcelaCurrentDayCompareList = currentParcela.days[j].split("/");
+            
+            var parcelaCurrentDay = new Date(parcelaCurrentDayCompareList[2] + "/" + parcelaCurrentDayCompareList[1] + "/" + parcelaCurrentDayCompareList[0])
 
-            } else if(currentDay >= parcelaCurrentDay){
-                var novaDate = new Date(parcelaCurrentDay)
-                novaListaParcelasPagas.push(novaDate.getMonth() + 1 + "/" + novaDate.getDate() + "/" + novaDate.getFullYear());
+            if(currentDay.getTime() < parcelaCurrentDay.getTime()){
+                novaListaParcelas.push(currentParcela.days[j]);
+
+            } else if(currentDay.getTime() >= parcelaCurrentDay.getTime()){
+                novaListaParcelasPagas.push(currentParcela.days[j]);
 
             }
 
         }
 
-        const updatedDaysParcela = await Parcelas.findByIdAndUpdate(currentParcela._id, {
+        await Parcelas.findByIdAndUpdate(currentParcela._id, {
             $set: {
                 days: novaListaParcelas
             }
         }, {new: true})
 
         if(novaListaParcelasPagas.length > 0) {
-            const updatedDaysParcelaPaga = await Parcelas.findByIdAndUpdate(currentParcela._id, {
+            await Parcelas.findByIdAndUpdate(currentParcela._id, {
                 $set: {
                     daysPassed: novaListaParcelasPagas
                 }
@@ -79,6 +80,7 @@ export const addParcela = async(req, res, next) => {
 
     var timeFinal = parseInt(partesTime[2]) + "/" + parseInt(partesTime[1]) + "/" + parseInt(partesTime[0]);
 
+    console.log("TimeFinal: " + timeFinal);
     console.log(lista)
 
     const parcela = new Parcelas({name: req.body.name, subtitle: req.body.subtitle, value: req.body.value, days: lista, numero: req.body.numero, time: timeFinal, userID: req.user.id});

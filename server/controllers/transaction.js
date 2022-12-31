@@ -26,15 +26,28 @@ export const deleteTransaction = async(req, res, next) => {
 }
 
 export const updateTransaction = async(req, res, next) => {
+    console.log(req.params.id)
+
     try{
         const transaction = await Transaction.findById(req.params.id);
-        if(!transaction) return next(createError(404, "Transaction not found!"));
+        if(req.user.id === transaction.id) {
+            if(!transaction) return next(createError(404, "Transaction not found!"));
 
-        const updatedTransaction = await Transaction.findByIdAndUpdate(req.params.id, {
-            $set: req.body,
-        }, {new: true})
-        
-        res.status(200).json(updatedTransaction);
+            const updatedTransaction = await Transaction.findByIdAndUpdate(req.params.id, {
+                $set: {
+                    name: req.body.name,
+                    subtitle: req.body.subtitle,
+                    value: req.body.value,
+                    time: req.body.time,
+                }
+            }, {new: true})
+            
+            res.status(200).json(updatedTransaction);
+        } else {
+            throw new Error("This isnt your transaction!")
+        }
+
+
     } catch(err){
         next(createError(err));
     }
